@@ -9,7 +9,7 @@
   --ocre: #D9982A;
   --verde: #1E7A55;
   --crema: #FBF7EE;
-  --mesa-color: #23262F;
+  --mesa-color: #8C6540;
 
   --cartel: 'Alfa Slab One', Georgia, serif;
   --display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
@@ -19,16 +19,15 @@
   min-height: 100vh;
   min-height: 100dvh; /* en el celular, sin contar la barra del navegador */
   background-color: var(--mesa-color);
-  /* Verde, azul y rojo: un brillo de cada uno anclado a su esquina,
-     sobre un fondo oscuro neutro para que no se mezclen en un marrón
-     sucio en el medio. Los tres van en las esquinas y no en el centro
-     porque ahí los tapa la hoja. */
+  /* Madera: vetas finas + un par de nudos sutiles sobre un degradado
+     cálido, para que la hoja se vea apoyada sobre una mesa de verdad
+     y no flotando en un fondo abstracto. */
   background-image:
-    repeating-linear-gradient(58deg, rgba(255,255,255,.018) 0 2px, transparent 2px 7px),
-    radial-gradient(110% 85% at 4% -8%, rgba(30,122,85,.62) 0%, transparent 50%),
-    radial-gradient(120% 90% at 100% -8%, rgba(23,64,110,.72) 0%, transparent 52%),
-    radial-gradient(120% 90% at 50% 118%, rgba(198,43,34,.55) 0%, transparent 55%),
-    radial-gradient(150% 95% at 50% 50%, #363B47 0%, #1B1E26 100%);
+    repeating-linear-gradient(89deg, rgba(255,241,214,.07) 0 3px, transparent 3px 9px),
+    repeating-linear-gradient(89deg, rgba(0,0,0,.06) 0 1px, transparent 1px 46px),
+    radial-gradient(55% 38% at 18% 28%, rgba(0,0,0,.15) 0%, transparent 62%),
+    radial-gradient(48% 34% at 82% 78%, rgba(0,0,0,.13) 0%, transparent 62%),
+    linear-gradient(165deg, #B98554 0%, #74502D 100%);
   padding: 20px 12px 20px;
   font-family: var(--texto);
   color: var(--grafito);
@@ -42,7 +41,7 @@
   max-width: 470px; margin: 14px auto 0;
   text-align: center;
   font-family: var(--display); font-size: 10px; letter-spacing: .08em;
-  color: rgba(251,247,238,.32);
+  color: rgba(251,247,238,.55);
 }
 
 /* La hoja llega siempre hasta abajo de la pantalla, aunque haya poco
