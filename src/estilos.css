@@ -21,10 +21,21 @@
      mide su propio 100dvh por separado, en el celular esos dos
      cálculos pueden desincronizarse cuando la barra de direcciones
      se achica al scrollear, y queda un sobrante de mesa vacía debajo
-     del pie de página. */
+     del pie de página.
+
+     100dvh además tiene su propio problema: es dinámico, se recalcula
+     en vivo a medida que la barra de direcciones aparece/desaparece,
+     y ese recálculo puede ir un paso atrás del viewport real (sobre
+     todo en Chrome/Android) — queda .mesa corta un instante y asoma
+     el fondo de html/body debajo del pie. 100lvh mide directamente el
+     viewport "grande" (con la barra ya escondida), así que .mesa
+     nunca se queda corta: como mucho sobra un pelín de alto cuando la
+     barra está visible, que se resuelve con un scroll imperceptible
+     en vez de un hueco de color. */
   display: flex; flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
+  min-height: 100lvh;
   background-color: var(--mesa-color);
   /* Madera: vetas finas + un par de nudos sutiles sobre un degradado
      cálido, para que la hoja se vea apoyada sobre una mesa de verdad
