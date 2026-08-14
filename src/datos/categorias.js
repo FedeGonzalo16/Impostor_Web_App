@@ -99,9 +99,9 @@ export const CATEGORIAS = [
       ["la heladera que hace ruido", "misterio"],
       ["el ascensor que se traba", "atrapado"],
       ["la fila del colectivo", "sol"],
-      ["el semáforo que no funciona", "confusión"],
-      ["el tren lleno de gente", "hamaca"],
-      ["el piquete en la calle", "reclamo"],
+      ["el semáforo que no funciona", "quilombo"],
+      ["el tren lleno de gente", "presionado"],
+      ["el piquete en la calle", "quejas"],
     ],
   },
   {

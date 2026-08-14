@@ -16,11 +16,15 @@
   --texto: 'Archivo', system-ui, -apple-system, sans-serif;
   --mano: 'Caveat', 'Segoe Script', cursive;
 
-  /* Sin min-height propio a propósito: alcanza con que .hoja garantice
-     llegar al fondo de la pantalla. Si .mesa mide su propio 100dvh
-     por separado, en el celular ese cálculo puede desincronizarse del
-     de .hoja cuando la barra de direcciones se achica al scrollear,
-     y queda un sobrante de mesa vacía debajo del pie de página. */
+  /* Solo .mesa lee el viewport (una vez). .hoja no tiene su propio
+     min-height: crece con flex para ocupar lo que sobre. Si cada uno
+     mide su propio 100dvh por separado, en el celular esos dos
+     cálculos pueden desincronizarse cuando la barra de direcciones
+     se achica al scrollear, y queda un sobrante de mesa vacía debajo
+     del pie de página. */
+  display: flex; flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--mesa-color);
   /* Madera: vetas finas + un par de nudos sutiles sobre un degradado
      cálido, para que la hoja se vea apoyada sobre una mesa de verdad
@@ -49,12 +53,12 @@
 
 /* La hoja llega siempre hasta abajo de la pantalla, aunque haya poco
    contenido: si no, queda la mesa vacía por debajo y el borde rasgado
-   flotando en el medio. Los 40px son el padding vertical de .mesa
-   (20 arriba + 20 abajo). */
+   flotando en el medio. `flex: 1` en vez de un min-height propio: así
+   ocupa lo que le sobra dentro de .mesa (que es la única que mide el
+   viewport), y no dos cálculos de dvh que puedan desincronizarse. */
 .hoja {
-  max-width: 470px; margin: 0 auto;
-  min-height: calc(100vh - 40px);
-  min-height: calc(100dvh - 40px);
+  max-width: 470px; width: 100%; margin: 0 auto;
+  flex: 1 0 auto;
   display: flex; flex-direction: column;
   position: relative;
   background-color: var(--papel);
