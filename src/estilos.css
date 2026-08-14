@@ -16,8 +16,11 @@
   --texto: 'Archivo', system-ui, -apple-system, sans-serif;
   --mano: 'Caveat', 'Segoe Script', cursive;
 
-  min-height: 100vh;
-  min-height: 100dvh; /* en el celular, sin contar la barra del navegador */
+  /* Sin min-height propio a propósito: alcanza con que .hoja garantice
+     llegar al fondo de la pantalla. Si .mesa mide su propio 100dvh
+     por separado, en el celular ese cálculo puede desincronizarse del
+     de .hoja cuando la barra de direcciones se achica al scrollear,
+     y queda un sobrante de mesa vacía debajo del pie de página. */
   background-color: var(--mesa-color);
   /* Madera: vetas finas + un par de nudos sutiles sobre un degradado
      cálido, para que la hoja se vea apoyada sobre una mesa de verdad
