@@ -1,0 +1,586 @@
+@import "./fuentes.css";
+
+.mesa {
+  --papel: #EAE4D3;
+  --renglon: #A9B6CC;
+  --tinta: #17406E;
+  --grafito: #262420;
+  --rojo: #C62B22;
+  --ocre: #D9982A;
+  --verde: #1E7A55;
+  --crema: #FBF7EE;
+  --mesa-color: #23262F;
+
+  --cartel: 'Alfa Slab One', Georgia, serif;
+  --display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --texto: 'Archivo', system-ui, -apple-system, sans-serif;
+  --mano: 'Caveat', 'Segoe Script', cursive;
+
+  min-height: 100vh;
+  min-height: 100dvh; /* en el celular, sin contar la barra del navegador */
+  background-color: var(--mesa-color);
+  /* Verde, azul y rojo: un brillo de cada uno anclado a su esquina,
+     sobre un fondo oscuro neutro para que no se mezclen en un marrón
+     sucio en el medio. Los tres van en las esquinas y no en el centro
+     porque ahí los tapa la hoja. */
+  background-image:
+    repeating-linear-gradient(58deg, rgba(255,255,255,.018) 0 2px, transparent 2px 7px),
+    radial-gradient(110% 85% at 4% -8%, rgba(30,122,85,.62) 0%, transparent 50%),
+    radial-gradient(120% 90% at 100% -8%, rgba(23,64,110,.72) 0%, transparent 52%),
+    radial-gradient(120% 90% at 50% 118%, rgba(198,43,34,.55) 0%, transparent 55%),
+    radial-gradient(150% 95% at 50% 50%, #363B47 0%, #1B1E26 100%);
+  padding: 20px 12px 20px;
+  font-family: var(--texto);
+  color: var(--grafito);
+  box-sizing: border-box;
+}
+.mesa *, .mesa *::before, .mesa *::after { box-sizing: border-box; }
+
+/* El pie de imprenta, sobre la mesa y no sobre el papel: es de la app,
+   no de la partida. */
+.pie-mesa {
+  max-width: 470px; margin: 14px auto 0;
+  text-align: center;
+  font-family: var(--display); font-size: 10px; letter-spacing: .08em;
+  color: rgba(251,247,238,.32);
+}
+
+/* La hoja llega siempre hasta abajo de la pantalla, aunque haya poco
+   contenido: si no, queda la mesa vacía por debajo y el borde rasgado
+   flotando en el medio. Los 40px son el padding vertical de .mesa
+   (20 arriba + 20 abajo). */
+.hoja {
+  max-width: 470px; margin: 0 auto;
+  min-height: calc(100vh - 40px);
+  min-height: calc(100dvh - 40px);
+  display: flex; flex-direction: column;
+  position: relative;
+  background-color: var(--papel);
+  background-image:
+    linear-gradient(rgba(169,182,204,.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(169,182,204,.55) 1px, transparent 1px);
+  background-size: 100% 26px, 26px 100%;
+  background-position: -1px -1px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.45) inset, 0 18px 38px rgba(0,0,0,.55);
+  padding: 16px 20px 33px;
+}
+.hoja::before {
+  content: ''; position: absolute; top: 0; bottom: 0; left: 40px; width: 1px;
+  background: rgba(198,43,34,.32); pointer-events: none;
+}
+.rasgado {
+  position: absolute; left: 0; right: 0; bottom: -1px;
+  width: 100%; height: 17px; display: block;
+}
+.rasgado path { fill: var(--mesa-color); }
+
+/* --- tipografía base --- */
+.rotulo {
+  font-family: var(--display);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--tinta); margin: 0 0 12px;
+}
+.rotulo.entre { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.rotulo.separado { margin-top: 18px; }
+.cuenta {
+  font-family: var(--display); font-weight: 400; font-size: 11px;
+  letter-spacing: .1em; color: var(--grafito); opacity: .6; text-transform: none;
+}
+.manuscrito { font-family: var(--mano); font-weight: 500; }
+.bajo { font-size: 16px; opacity: .75; font-style: normal; }
+/* color con alfa, no `opacity`: así los símbolos de la leyenda (que
+   ya traen su propia opacidad, pensada para la tabla) no se apagan el
+   doble por quedar anidados dentro de un padre también translúcido. */
+.nota { font-size: 12.5px; line-height: 1.5; color: rgba(38,36,32,.68); margin: 10px 0 0; }
+.nota .tilde, .nota .cero { opacity: 1; font-weight: 700; }
+/* Cada oración es su propio <p>, con el mismo gap que .instrucciones,
+   para que el espaciado entre oraciones sea igual al de los pasos de
+   "cómo se juega" en vez de depender de un <br> pegado. */
+.entrada { display: flex; flex-direction: column; gap: 12px; margin: 2px 0 4px; }
+.entrada p { font-size: 14px; line-height: 1.6; margin: 0; }
+.rojo-txt { color: var(--rojo); }
+.cero { color: var(--tinta); }
+.ord {
+  font-family: var(--display); font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; color: var(--tinta); opacity: .55;
+  min-width: 20px; flex-shrink: 0;
+}
+
+/* --- ornamentos de fileteado --- */
+.orn-tallo { fill: none; stroke: var(--tinta); stroke-width: 3.6; stroke-linecap: round; }
+.orn-hoja { fill: var(--verde); }
+.orn-brillo { fill: none; stroke: var(--crema); stroke-width: 1.3; opacity: .8; }
+.orn-punto { fill: var(--ocre); }
+.orn-gota { fill: var(--rojo); }
+.orn-rayos line { stroke: var(--ocre); stroke-width: 2.5; stroke-linecap: round; }
+.orn-disco { fill: var(--rojo); }
+.orn-anillo { fill: none; stroke: var(--grafito); stroke-width: 1.2; opacity: .45; }
+.orn-centro { fill: var(--crema); }
+
+/* --- encabezado: el cartel --- */
+.encabezado { margin-bottom: 22px; text-align: center; }
+.corona {
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  margin-bottom: 2px;
+}
+.voluta { width: 86px; height: 46px; flex-shrink: 0; }
+.orn-der { transform: scaleX(-1); }
+.roseta { width: 38px; height: 38px; flex-shrink: 0; }
+
+.titulo { margin: 0; line-height: 1; }
+.titulo-chico {
+  display: block; font-family: var(--display);
+  font-size: 12px; font-weight: 700; letter-spacing: .42em;
+  text-transform: uppercase; color: var(--rojo);
+  margin-bottom: 1px; padding-left: .42em;
+}
+.titulo-grande {
+  display: block; font-family: var(--cartel);
+  font-size: clamp(33px, 12.5vw, 54px); line-height: .96;
+  letter-spacing: -.015em; text-transform: uppercase;
+  color: var(--tinta);
+  text-shadow:
+    -1px -1px 0 rgba(251,247,238,.55),
+     3px  4px 0 var(--rojo),
+     3px  4px 0 var(--rojo);
+}
+.pintado {
+  color: var(--tinta);
+  text-shadow: -1px -1px 0 rgba(251,247,238,.5), 3px 3px 0 var(--rojo);
+}
+.pintado-rojo {
+  color: var(--rojo);
+  text-shadow: -1px -1px 0 rgba(251,247,238,.5), 3px 3px 0 var(--tinta);
+}
+
+.cinta {
+  display: inline-block; margin: 9px 0 0;
+  background: var(--tinta); color: var(--crema);
+  font-size: 19px; line-height: 1.15;
+  padding: 3px 26px;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 13px) 50%, 100% 100%, 0 100%, 13px 50%);
+  box-shadow: 2px 3px 0 rgba(38,36,32,.22);
+}
+.cinta.chica { font-size: 17px; padding: 2px 20px; max-width: 100%; }
+
+.doble-regla {
+  margin-top: 16px; height: 4px;
+  border-top: 2.5px solid var(--grafito);
+  border-bottom: 1px solid var(--grafito);
+}
+.franja {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding-top: 9px;
+}
+.volver {
+  background: none; border: none; padding: 4px 0; margin: 0;
+  font-family: var(--display); font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--tinta); opacity: .7; cursor: pointer;
+}
+.plaqueta {
+  font-family: var(--display); font-size: 9px; font-weight: 700;
+  letter-spacing: .24em; text-transform: uppercase;
+  color: var(--rojo); border: 1.5px solid var(--rojo);
+  padding: 4px 9px; margin-left: auto;
+  box-shadow: inset 0 0 0 1px rgba(198,43,34,.35);
+  display: inline-flex; align-items: baseline; gap: 5px;
+}
+.plaqueta b {
+  font-variation-settings: 'wdth' 82, 'wght' 900; font-weight: 900;
+  font-size: 15px; letter-spacing: .04em;
+}
+
+/* --- estructura --- */
+/* `flex: 1` para que el bloque ocupe la hoja entera: así lo que lleve
+   `margin-top: auto` —la ficha de la portada— cae contra el pie.
+
+   Todas las pantallas devuelven este mismo `<section>` como raíz, así
+   que la animación de entrada alcanza para todo el ruteo sin tocar
+   `App.jsx`: React desmonta la pantalla vieja y monta esta de cero
+   cada vez que cambia `st.pantalla`. */
+.bloque { display: flex; flex-direction: column; gap: 22px; flex: 1; animation: entra .22s ease-out; }
+@keyframes entra { from { opacity: 0; transform: translateY(6px); } }
+.apartado { border-top: 1px solid rgba(42,40,35,.28); padding-top: 14px; }
+.apartado:first-child { border-top: none; padding-top: 0; }
+.apartado.centrado { text-align: center; }
+.centrado { text-align: center; }
+.pie { display: flex; flex-direction: column; gap: 10px; }
+
+/* --- botones --- */
+.btn {
+  font-family: var(--display);
+  font-variation-settings: 'wdth' 88, 'wght' 800; font-weight: 800;
+  font-size: 15px; text-transform: uppercase; letter-spacing: .07em;
+  width: 100%; min-height: 56px; padding: 15px 16px;
+  border: none; border-radius: 0; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; line-height: 1.15; text-align: center;
+  transition: transform .1s ease;
+}
+.btn:disabled { opacity: .38; cursor: not-allowed; transform: none; }
+.btn-tinta {
+  background: var(--tinta); color: var(--crema);
+  box-shadow: inset 0 0 0 1px rgba(251,247,238,.45), 4px 5px 0 var(--rojo);
+}
+.btn-rojo {
+  background: var(--rojo); color: var(--crema);
+  box-shadow: inset 0 0 0 1px rgba(251,247,238,.45), 4px 5px 0 var(--tinta);
+}
+.btn-tinta:active, .btn-rojo:active { transform: translate(2px, 3px); }
+.btn-tinta:active { box-shadow: inset 0 0 0 1px rgba(251,247,238,.45), 2px 2px 0 var(--rojo); }
+.btn-rojo:active { box-shadow: inset 0 0 0 1px rgba(251,247,238,.45), 2px 2px 0 var(--tinta); }
+.btn-tinta:disabled, .btn-rojo:disabled { box-shadow: inset 0 0 0 1px rgba(251,247,238,.35); }
+.btn-borde {
+  background: transparent; color: var(--grafito);
+  border: 1.5px solid var(--grafito);
+  box-shadow: inset 0 0 0 3px var(--papel), inset 0 0 0 4px rgba(38,36,32,.45);
+  font-size: 13px;
+}
+.btn-borde:active { transform: translateY(1px); }
+.corto {
+  width: auto; min-height: 48px; padding: 12px 16px; font-size: 13px;
+  align-self: flex-start; flex-shrink: 0; margin-right: 4px;
+}
+.corto.btn-tinta { box-shadow: inset 0 0 0 1px rgba(251,247,238,.45), 3px 4px 0 var(--rojo); }
+.enlace {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--display); font-size: 11px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--tinta); padding: 14px 0 4px; line-height: 1.7;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;
+}
+.btn:focus-visible, .opcion:focus-visible, .cat:focus-visible,
+.campo:focus-visible, .enlace:focus-visible, .tachar:focus-visible,
+.doblado:focus-visible, .volver:focus-visible {
+  outline: 2px solid var(--rojo); outline-offset: 2px;
+}
+
+/* --- instrucciones --- */
+.instrucciones { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.instrucciones li { display: flex; gap: 12px; font-size: 14px; line-height: 1.5; }
+.instrucciones .ord { text-transform: none; letter-spacing: .05em; font-size: 11px; padding-top: 3px; }
+.rotulo + .instrucciones { margin-top: 0; } /* el rótulo ya deja su aire */
+
+/* --- ficha de la portada ---
+   Va con `margin-top: auto` para quedar apoyada contra el pie de la
+   hoja, sea cual sea el alto de la pantalla. */
+.ficha {
+  margin-top: auto;
+  display: flex; gap: 12px;
+  border-top: 1px solid rgba(42,40,35,.28);
+  padding-top: 14px;
+}
+.ficha > div { flex: 1; min-width: 0; }
+.ficha dt {
+  font-family: var(--display);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--grafito); opacity: .6;
+}
+/* color con alfa, no `opacity`: así el nombre puede ir en negro sólido
+   sin que la dimm del resto de la frase se lo lleve puesto. */
+.ficha dd { margin: 3px 0 0; font-family: var(--mano); font-size: 21px; line-height: 1.15; color: rgba(38,36,32,.65); }
+.ficha dd .dato-nombre { color: var(--tinta); }
+.ficha dd .dato-detalle { font-size: 20px; }
+/* La misma ficha, pero como una sección más de la pantalla final:
+   sin el `margin-top: auto` de la portada, que ahí la pegaba contra
+   el pie de la hoja y acá la mandaría de un salto al fondo. Además
+   son hasta 5 datos (no 2 o 3 como en la portada), así que envuelve
+   de a dos por fila en vez de achicarse todos en una sola línea. */
+.apartado .ficha {
+  margin-top: 0; border-top: none; padding-top: 0;
+  flex-wrap: wrap; gap: 18px 12px;
+}
+.apartado .ficha > div { flex: 1 1 45%; min-width: 130px; }
+
+/* --- campos --- */
+.renglon-input { display: flex; gap: 8px; align-items: stretch; }
+.campo {
+  flex: 1; min-width: 0;
+  background: transparent;
+  border: none; border-bottom: 1.5px solid var(--grafito); border-radius: 0;
+  font-family: var(--mano); font-size: 22px;
+  color: var(--tinta); padding: 8px 4px;
+}
+.campo::placeholder { font-family: var(--texto); font-size: 14px; color: rgba(42,40,35,.45); }
+.area {
+  border: 1.5px solid var(--grafito); padding: 10px; width: 100%;
+  resize: vertical; line-height: 1.4;
+}
+.editor { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; align-items: flex-start; }
+.editor .campo { width: 100%; }
+
+.lista-nombres { list-style: none; margin: 16px 0 0; padding: 0; width: 100%; }
+.lista-nombres li {
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px dashed rgba(42,40,35,.32); padding: 7px 0;
+}
+.nombre { font-size: 22px; line-height: 1.1; color: var(--tinta); }
+.tachar {
+  margin-left: auto; background: none; border: none; cursor: pointer;
+  color: var(--rojo); font-size: 15px; padding: 6px 2px; line-height: 1;
+}
+
+/* --- opciones --- */
+.fila-opciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.fila-opciones.centrada { justify-content: center; }
+.opcion {
+  font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: .06em;
+  background: transparent; color: var(--grafito);
+  border: 1.5px solid rgba(42,40,35,.45); border-radius: 0;
+  padding: 12px 16px; min-height: 46px; min-width: 52px; cursor: pointer;
+}
+.opcion.elegida { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
+.opcion:disabled { opacity: .28; cursor: not-allowed; }
+
+/* --- categorías --- */
+.lista-cat { list-style: none; margin: 0; padding: 0; }
+.lista-cat li { border-bottom: 1px dashed rgba(42,40,35,.32); }
+.cat {
+  position: relative; width: 100%;
+  display: flex; align-items: center; gap: 12px;
+  background: none; border: none; cursor: pointer;
+  padding: 13px 4px; text-align: left; min-height: 48px;
+  font-family: var(--texto); font-size: 15px; color: var(--grafito);
+}
+.cat-nombre { line-height: 1.25; }
+.cat-texto {
+  position: relative; display: inline-block;
+  padding: 0 2px;
+}
+.cat.elegida { color: var(--tinta); font-weight: 700; }
+.circulo {
+  position: absolute; left: -28px; top: 50%;
+  width: calc(100% + 56px); height: 52px;
+  transform: translateY(-50%);
+  overflow: visible; pointer-events: none;
+}
+.circulo path {
+  fill: none; stroke: var(--rojo); stroke-width: 2.1;
+  stroke-linecap: round; opacity: .85;
+  vector-effect: non-scaling-stroke;
+}
+
+/* --- anotador con palotes --- */
+.anotador { list-style: none; margin: 0; padding: 0; }
+.anotador li {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 8px 0; border-bottom: 1px dashed rgba(42,40,35,.32);
+}
+.puntos { display: flex; align-items: center; min-height: 22px; }
+.palotes { overflow: visible; }
+.palotes line { stroke: var(--tinta); stroke-width: 2.4; stroke-linecap: round; }
+.cero-manuscrito { overflow: visible; }
+.cero-manuscrito path {
+  fill: none; stroke: var(--tinta); stroke-width: 2.2; stroke-linecap: round;
+  opacity: .45;
+}
+.palotes line.rojo {
+  stroke: var(--rojo); stroke-width: 2.8;
+  stroke-dasharray: 30; stroke-dashoffset: 30;
+  animation: trazo .45s cubic-bezier(.3,.9,.4,1) .25s forwards;
+}
+@keyframes trazo { to { stroke-dashoffset: 0; } }
+.num-suelto { font-family: var(--display); font-weight: 800; font-size: 18px; color: var(--tinta); }
+.mas { font-family: var(--display); font-size: 11px; font-weight: 700; margin-left: 8px; }
+
+/* --- papelito --- */
+.pasale { font-size: 14px; margin: 0; text-align: center; opacity: .8; }
+.destacado { font-size: 26px; color: var(--tinta); display: block; margin-top: 2px; }
+.papelito { perspective: 1400px; }
+.papelito-in {
+  position: relative; height: 320px;
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.25,.8,.3,1);
+}
+.papelito.abierto .papelito-in { transform: rotateX(180deg); }
+.cara {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 26px; text-align: center;
+  border: 1.5px solid var(--grafito);
+  background-color: #F1EDE1;
+  box-shadow: 0 6px 14px rgba(0,0,0,.22);
+}
+.doblado {
+  width: 100%; cursor: pointer; font-family: inherit; color: var(--grafito);
+  box-shadow: inset 0 0 0 4px var(--papel), inset 0 0 0 5px rgba(23,64,110,.55),
+              0 6px 14px rgba(0,0,0,.22);
+}
+.orn-esq { position: absolute; width: 72px; height: 39px; opacity: .9; }
+.orn-esq-1 { top: 12px; left: 12px; }
+.orn-esq-2 { top: 12px; right: 12px; transform: scaleX(-1); }
+.orn-esq-3 { bottom: 12px; left: 12px; transform: scaleY(-1); }
+.orn-esq-4 { bottom: 12px; right: 12px; transform: scale(-1); }
+.pliegue {
+  position: absolute; left: 0; right: 0; top: 50%; height: 1px;
+  background: rgba(42,40,35,.35);
+  box-shadow: 0 -7px 13px -7px rgba(42,40,35,.55), 0 7px 13px -7px rgba(42,40,35,.35);
+}
+.firma { font-size: 34px; line-height: 1.1; color: var(--tinta); max-width: 90%; word-break: break-word; }
+.abrir {
+  font-family: var(--display); font-size: 10px; font-weight: 700;
+  letter-spacing: .3em; text-transform: uppercase; color: var(--rojo);
+  border-bottom: 1.5px solid var(--rojo); padding-bottom: 3px;
+}
+.abierta-cara {
+  transform: rotateX(180deg);
+  box-shadow: inset 0 0 0 4px var(--papel), inset 0 0 0 5px rgba(23,64,110,.5),
+              0 6px 14px rgba(0,0,0,.22);
+}
+.es-impostor.abierta-cara {
+  box-shadow: inset 0 0 0 4px var(--papel), inset 0 0 0 5px rgba(198,43,34,.55),
+              0 6px 14px rgba(0,0,0,.22);
+}
+.grande {
+  font-family: var(--display);
+  font-variation-settings: 'wdth' 82, 'wght' 900; font-weight: 900;
+  font-size: clamp(27px, 9.5vw, 38px); line-height: 1.03;
+  text-transform: uppercase; word-break: break-word; color: var(--tinta);
+}
+.marco-rojo {
+  border: 2px solid var(--rojo); padding: 12px 16px; transform: rotate(-2deg);
+  box-shadow: inset 0 0 0 1px rgba(190,58,43,.45);
+}
+.marco-rojo .grande { color: var(--rojo); }
+
+/* --- ronda --- */
+.arranca { font-size: 34px; color: var(--tinta); margin: 0; line-height: 1.1; }
+.crono {
+  font-family: var(--display);
+  font-variation-settings: 'wdth' 75, 'wght' 800; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-size: 62px; line-height: 1; margin: 4px 0 12px; color: var(--grafito);
+}
+.crono.vencido { color: var(--rojo); }
+.cinta-tiempo {
+  height: 6px; border: 1px solid rgba(42,40,35,.45); margin-bottom: 14px;
+  background: repeating-linear-gradient(45deg, rgba(42,40,35,.12) 0 4px, transparent 4px 8px);
+}
+.cinta-tiempo span { display: block; height: 100%; background: var(--tinta); transition: width 1s linear; }
+
+/* --- resultado --- */
+.veredicto {
+  border: 2px solid var(--tinta); padding: 18px 16px; text-align: center;
+  background: rgba(28,53,87,.07);
+}
+.veredicto.es-impostor { border-color: var(--rojo); background: rgba(190,58,43,.08); }
+.fallo {
+  font-family: var(--display);
+  font-variation-settings: 'wdth' 84, 'wght' 900; font-weight: 900;
+  font-size: clamp(22px, 7.5vw, 30px); line-height: 1.05;
+  text-transform: uppercase; margin: 4px 0 6px;
+}
+.fallo {
+  color: var(--tinta);
+  text-shadow: -1px -1px 0 rgba(251,247,238,.5), 2px 2px 0 rgba(198,43,34,.85);
+}
+.veredicto.es-impostor .fallo {
+  color: var(--rojo);
+  text-shadow: -1px -1px 0 rgba(251,247,238,.5), 2px 2px 0 rgba(23,64,110,.8);
+}
+.revelado {
+  font-family: var(--display);
+  font-variation-settings: 'wdth' 84, 'wght' 800; font-weight: 800;
+  font-size: 25px; line-height: 1.1; margin: 0;
+  text-transform: uppercase; color: var(--tinta);
+  text-shadow: -1px -1px 0 rgba(251,247,238,.5), 2px 2px 0 rgba(198,43,34,.85);
+}
+
+/* --- podio --- */
+.podio { display: flex; align-items: flex-end; gap: 10px; }
+.recorte {
+  flex: 1; background: #F1EDE1;
+  border: 1.5px solid var(--grafito);
+  padding: 14px 8px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  text-align: center; box-shadow: 0 5px 12px rgba(0,0,0,.2);
+}
+.recorte.primero { padding-top: 30px; transform: rotate(-1.2deg); border-width: 2px; }
+.recorte.segundo { padding-top: 20px; transform: rotate(1deg); }
+.recorte.tercero { padding-top: 14px; transform: rotate(-.6deg); }
+.roseta-podio { width: 30px; height: 30px; margin-bottom: -2px; }
+.puesto {
+  font-family: var(--cartel);
+  font-size: 22px; line-height: 1; color: var(--rojo);
+  text-shadow: -1px -1px 0 rgba(251,247,238,.6), 2px 2px 0 rgba(38,36,32,.18);
+}
+.recorte.primero { border-color: var(--tinta); }
+.recorte-nombre { font-size: 21px; line-height: 1.1; color: var(--tinta); word-break: break-word; }
+
+/* --- planilla --- */
+.desliza { overflow-x: auto; }
+.planilla { width: 100%; border-collapse: collapse; }
+.planilla th {
+  font-family: var(--display); font-size: 9px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--tinta); padding: 6px 5px; text-align: center;
+  border-bottom: 1.5px solid var(--grafito); white-space: nowrap;
+}
+.planilla td {
+  padding: 7px 5px; text-align: center; font-size: 14px;
+  border-bottom: 1px dashed rgba(42,40,35,.32); white-space: nowrap;
+}
+.planilla .izq { text-align: left; }
+.planilla .tot {
+  font-family: var(--display); font-weight: 800; font-size: 11px;
+  color: var(--tinta); border-left: 1px solid rgba(42,40,35,.35);
+}
+.planilla .puntero .tot { color: var(--rojo); font-size: 17px; }
+.fue-impostor { background: rgba(190,58,43,.13); }
+.tilde { color: var(--tinta); font-size: 15px; }
+
+/* --- historial --- */
+.historial { list-style: none; margin: 0; padding: 0; }
+.historial li {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 7px 0; border-bottom: 1px dashed rgba(42,40,35,.32); font-size: 14px;
+}
+.hist-palabra { flex: 1; }
+.hist-quien {
+  font-family: var(--display); font-size: 9px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; opacity: .75;
+}
+
+.cinta.chica { word-break: break-word; }
+
+@media (max-width: 370px) {
+  .hoja { padding: 14px 14px 31px; }
+  .hoja::before { left: 30px; }
+  .firma { font-size: 28px; }
+  .voluta { width: 68px; height: 37px; }
+  .roseta { width: 32px; height: 32px; }
+  .orn-esq { width: 58px; height: 31px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .papelito-in, .btn, .cinta-tiempo span { transition: none; }
+  .palotes line.rojo { animation: none; stroke-dashoffset: 0; }
+  .bloque { animation: none; }
+}
+
+/* --- la pista del impostor --- */
+.etiqueta-pista { margin: 2px 0 0; color: var(--rojo); }
+.pista {
+  font-family: var(--texto); font-size: 17px; line-height: 1.4;
+  font-weight: 500; color: var(--grafito);
+  max-width: 26ch; margin: -2px 0 0;
+  border-bottom: 1.5px solid rgba(198,43,34,.45); padding-bottom: 8px;
+}
+.abierta-cara.con-pista { gap: 8px; }
+.abierta-cara.con-pista .marco-rojo { padding: 8px 14px; }
+.abierta-cara.con-pista .grande { font-size: clamp(23px, 7.6vw, 30px); }
+.pista-revelada {
+  font-size: 21px; line-height: 1.3; margin: 0; color: var(--tinta);
+  font-weight: 700;
+}
+.hist-pista {
+  display: block; font-size: 15px; line-height: 1.2;
+  opacity: .72; font-style: normal; margin-top: 1px;
+}
+.nota code {
+  font-family: ui-monospace, monospace; font-size: 11.5px;
+  background: rgba(23,64,110,.09); padding: 1px 5px;
+}
