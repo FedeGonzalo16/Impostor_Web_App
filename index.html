@@ -20,11 +20,15 @@
     <meta name="twitter:title" content="El Impostor · anotador de juntada" />
     <meta name="twitter:description" content="El impostor: juego de juntada. Un teléfono, una palabra, un mentiroso." />
     <style>
-      /* Mismo fondo "madera" que .mesa (ver src/estilos.css), repetido acá
+      /* Mismo "madera" que .mesa (ver src/estilos.css), repetido acá
          para que cuando el navegador asome el área fuera del documento
          (rebote elástico al final del scroll en iOS, pull-to-refresh en
          Chrome) se vea la misma textura y no un color plano distinto,
-         que se notaba como una franja de otro tono arriba/abajo. */
+         que se notaba como una franja de otro tono arriba/abajo.
+         Sin `background-attachment: fixed`: en iOS Safari los fondos
+         fixed se repintan mal durante el rebote elástico y pueden
+         parpadear/desaparecer justo en ese momento — contraproducente
+         acá. */
       html, body {
         margin: 0; padding: 0;
         background-color: #8C6540;
@@ -34,9 +38,15 @@
           radial-gradient(55% 38% at 18% 28%, rgba(0,0,0,.15) 0%, transparent 62%),
           radial-gradient(48% 34% at 82% 78%, rgba(0,0,0,.13) 0%, transparent 62%),
           linear-gradient(165deg, #B98554 0%, #74502D 100%);
-        background-attachment: fixed;
         -webkit-text-size-adjust: 100%;
       }
+      /* Frena el gesto de pull-to-refresh / rebote de navegación de
+         Chrome: sin esto, tirar hacia abajo en el tope (o pasarse del
+         final) despinta un instante esa franja con el color liso del
+         navegador antes de que la página repinte encima. iOS Safari no
+         tiene forma de desactivar su propio rebote elástico por CSS,
+         por eso además el fondo de arriba ya queda igual al de .mesa. */
+      html { overscroll-behavior-y: none; }
       body { -webkit-tap-highlight-color: transparent; }
     </style>
   </head>
