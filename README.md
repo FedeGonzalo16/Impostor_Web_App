@@ -93,7 +93,7 @@ Hay un script que valida esto:
 npm test
 ```
 
-Chequea que toda palabra tenga pista, que ninguna pista filtre una palabra de más
+Esto, chequea que toda palabra tenga pista, que ninguna pista filtre una palabra de más
 de cuatro letras del término, que los ids no se repitan, que el sorteo no repita
 hasta agotar la categoría (ni por su categoría ni por el bolillero), que el
 reparto de roles y el puntaje sean correctos para 3 a 8 jugadores con 1 a 3
